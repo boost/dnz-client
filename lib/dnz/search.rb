@@ -21,8 +21,7 @@ module DNZ
 
     def parse_results
       @results = []
-
-      @doc.xpath('//results/result').each do |result_xml|
+      @doc.xpath('//results/result').each do |result_xml|       
         @results << DNZ::Result.new(result_xml)
       end
     end
