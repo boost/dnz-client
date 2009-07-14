@@ -39,12 +39,21 @@ module DNZ
     end
 
     def search(text, options = {})
-      options[:search_text] = text
+      options.reverse_merge!(
+        :search_text => text,
+        :num_results => 20,
+        :start => 0
+      )
+
+      # Select the correct page
+      page = options.delete(:page)
+      options[:start] = (page-1) * options[:num_results] if page
+
       @xml = fetch(:search, options)
-      DNZ::Search.new(self, @xml)
+      DNZ::Search.new(self, options, @xml)
     end
 
-    private
+    protected
 
     def fetch(path, options = {})
       validate_options(path, options)
@@ -55,9 +64,13 @@ module DNZ
       open(url)
     end
 
+    private
+
     def validate_options(path, options = {})
+      options.symbolize_keys!
+
       if ARGS.has_key?(path) && !Set.new(options.keys).subset?(ARGS[path])
-        raise ArgumentError.new("Valid options for #{path} are: #{ARGS[path].join(', ')}")
+        raise ArgumentError.new("Valid options for #{path} are: #{ARGS[path].to_a.join(', ')}, provided: #{options.keys.join(', ')}")
       end
     end
   end

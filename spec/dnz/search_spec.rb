@@ -24,6 +24,7 @@ describe Search do
     @client = mock(:client)
     @result = mock(:result)
     @facet = mock(:facet)
+    @options = {:search_text => 'test'}
 
     Result.stub!(:new).and_return(@result)
     Facet.stub!(:new).and_return(@facet)
@@ -32,12 +33,12 @@ describe Search do
   describe 'Search.new' do
     it 'should create one result' do
       Result.should_receive(:new).and_return(@result)
-      Search.new(@client, @xml).results.should == [@result]
+      Search.new(@client, @options, @xml).results.should == [@result]
     end
 
     it 'should create one facet' do
       Facet.should_receive(:new).and_return(@facet)
-      Search.new(@client, @xml).facets.should == [@facet]
+      Search.new(@client, @options, @xml).facets.should == [@facet]
     end
   end
 end
