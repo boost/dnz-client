@@ -33,6 +33,11 @@ describe Search do
   end
 
   describe 'Search.new' do
+    it 'should call @client.fetch' do
+      @client.should_receive(:fetch).with(:search, :search_text => 'test').and_return(@xml)
+      Search.new(@client, @options)
+    end
+
     it 'should create one result' do
       Result.should_receive(:new).and_return(@result)
       Search.new(@client, @options).results.should == [@result]
