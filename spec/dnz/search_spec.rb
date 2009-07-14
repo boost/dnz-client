@@ -28,17 +28,19 @@ describe Search do
 
     Result.stub!(:new).and_return(@result)
     Facet.stub!(:new).and_return(@facet)
+    
+    @client.stub!(:fetch).and_return(@xml)
   end
 
   describe 'Search.new' do
     it 'should create one result' do
       Result.should_receive(:new).and_return(@result)
-      Search.new(@client, @options, @xml).results.should == [@result]
+      Search.new(@client, @options).results.should == [@result]
     end
 
     it 'should create one facet' do
       Facet.should_receive(:new).and_return(@facet)
-      Search.new(@client, @options, @xml).facets.should == [@facet]
+      Search.new(@client, @options).facets.should == [@facet]
     end
   end
 end

@@ -49,11 +49,8 @@ module DNZ
       page = options.delete(:page)
       options[:start] = (page-1) * options[:num_results] if page
 
-      @xml = fetch(:search, options)
-      DNZ::Search.new(self, options, @xml)
-    end
-
-    protected
+      DNZ::Search.new(self, options)
+    end  
 
     def fetch(path, options = {})
       validate_options(path, options)

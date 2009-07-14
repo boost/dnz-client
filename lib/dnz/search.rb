@@ -9,12 +9,11 @@ module DNZ
   class Search
     attr_reader :result_count
 
-    def initialize(client, search_options, xml)
+    def initialize(client, search_options)
       @client = client
-      @xml = xml
       @search_options = search_options
 
-      parse_attributes
+      execute
     end
 
     def results
@@ -70,6 +69,8 @@ module DNZ
       @results = nil
       @facets = nil
       @xml = @client.send(:fetch, :search, @search_options)
+
+      parse_attributes
 
       self
     end
