@@ -4,8 +4,12 @@ PostInstall.txt
 README.rdoc
 Rakefile
 lib/dnz.rb
+lib/dnz/attributes.rb
+lib/dnz/client.rb
+lib/dnz/facet.rb
+lib/dnz/result.rb
+lib/dnz/search.rb
 script/console
 script/destroy
 script/generate
-test/test_dnz.rb
-test/test_helper.rb
+
