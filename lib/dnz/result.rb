@@ -8,7 +8,7 @@ module DNZ
       @attributes = {}
 
       doc.children.each do |child|
-        @attributes[child.name.downcase] = child.text.to_s
+        @attributes[child.name.downcase.underscore] = child.text.to_s
       end
     end
   end

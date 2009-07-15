@@ -31,7 +31,7 @@ module DNZ
     end
 
     def page
-      @page ||= ((@start || 0 / num_results_requested) + 1) rescue 1
+      (((@start || 0) / num_results_requested) + 1) rescue 1
     end
 
     def page=(new_page)
@@ -40,7 +40,7 @@ module DNZ
     end
 
     def pages
-      @pages ||= num_results_requested < result_count ? (result_count.to_f / num_results_requested).ceil : 0
+      num_results_requested < result_count ? (result_count.to_f / num_results_requested).ceil : 0
     end
 
     def num_results_requested
@@ -64,8 +64,6 @@ module DNZ
 
     def execute
       @doc = nil
-      @page = nil
-      @pages = nil
       @results = nil
       @facets = nil
       @xml = @client.send(:fetch, :search, @search_options)
@@ -82,9 +80,6 @@ module DNZ
     end
 
     def parse_attributes
-      @page = nil
-      @pages = nil
-
       %w(num-results-requested result-count start).each do |node|
         if child = doc.root.xpath(node).first
           name = child.name.downcase.underscore
