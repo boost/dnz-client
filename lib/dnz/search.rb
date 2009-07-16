@@ -16,6 +16,10 @@ module DNZ
       execute
     end
 
+    def options
+      @search_options
+    end
+
     def results
       if @results.nil?
         parse_results
