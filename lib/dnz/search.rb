@@ -2,8 +2,11 @@ require 'nokogiri'
 require 'dnz/result'
 require 'dnz/facet'
 
-gem 'mislav-will_paginate' rescue nil
-require 'will_paginate/collection' rescue nil
+begin
+  gem 'mislav-will_paginate' rescue nil
+  require 'will_paginate/collection' rescue nil
+rescue LoadError => e
+end
 
 module DNZ
   class Search
@@ -14,6 +17,10 @@ module DNZ
       @search_options = search_options
 
       execute
+    end
+
+    def text
+      @search_options[:search_text]
     end
 
     def options
