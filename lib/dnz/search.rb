@@ -9,9 +9,16 @@ rescue LoadError => e
 end
 
 module DNZ
+  # This class represents a digitalnz search API call. It should not be created directly. Instead
+  # use the <tt>Client.search</tt> method.
+  #
+  # === Example
+  #   search = client.search('text')
+  #   puts "%d results found on %d pages" % [search.result_count, search.pages]
   class Search
     attr_reader :result_count
 
+    # Constructor for Search class. Do not call this directly, instead use the <tt>Client.search</tt> method.
     def initialize(client, search_options)
       @client = client
       @search_options = search_options
@@ -19,14 +26,17 @@ module DNZ
       execute
     end
 
+    # The text used for searching
     def text
       @search_options[:search_text]
     end
 
+    # The search options passed to the digitalnz API
     def options
       @search_options
     end
 
+    # An array of results. If the mislav-will_paginate gem is installed this will return a paginated array.
     def results
       if @results.nil?
         parse_results
@@ -36,24 +46,38 @@ module DNZ
       @results
     end
 
+    # An array of facets.
+    #
+    # === Example
+    #   search = client.search('text', :facets => 'category')
+    #   categories = search.facets['category']
+    #   categories.each do |category|
+    #     puts '%d results in category %s' % [category.count, category.name]
+    #   end
     def facets
       parse_facets if @facets.nil?
       @facets
     end
 
+    # The current page of results, based on the number of requested results and the start value
+    # (see <tt>Client.search</tt>).
     def page
       (((@start || 0) / num_results_requested) + 1) rescue 1
     end
 
+    # Set the page. This will update the search :start option and call the API again. The results array
+    # will be replaced with the new page of results.
     def page=(new_page)
       @search_options['start'] = (new_page-1) * num_results_requested
       execute
     end
 
+    # The number of pages available for the current search.
     def pages
       num_results_requested < result_count ? (result_count.to_f / num_results_requested).ceil : 0
     end
 
+    # The number of results requested via the :num_results option (see <tt>Client.search</tt>).
     def num_results_requested
       @num_results_requested || 20
     end
@@ -108,7 +132,7 @@ module DNZ
     end
 
     def parse_facets
-      @facets = []
+      @facets = FacetArray.new
 
       doc.xpath('//facets/facet').each do |facet_xml|
         @facets << DNZ::Facet.new(@client, self, facet_xml)

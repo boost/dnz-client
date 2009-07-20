@@ -1,6 +1,7 @@
 require 'dnz/attributes'
 
 module DNZ
+  # A DNZ::Search result record
   class Result
     include DNZ::Attributes
     
