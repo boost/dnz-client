@@ -111,7 +111,7 @@ module DNZ
       @facets = []
 
       doc.xpath('//facets/facet').each do |facet_xml|
-        @facets << DNZ::Facet.new(@client, facet_xml)
+        @facets << DNZ::Facet.new(@client, self, facet_xml)
       end
     end
   end
