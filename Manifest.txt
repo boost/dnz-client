@@ -2,6 +2,7 @@ History.txt
 Manifest.txt
 PostInstall.txt
 README.rdoc
+License.txt
 Rakefile
 dnz.gemspec
 lib/dnz.rb
