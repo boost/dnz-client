@@ -4,7 +4,6 @@ PostInstall.txt
 README.rdoc
 License.txt
 Rakefile
-dnz.gemspec
 lib/dnz.rb
 lib/dnz/attributes.rb
 lib/dnz/client.rb
