@@ -13,7 +13,7 @@ Hoe.plugin :newgem
 $hoe = Hoe.spec 'dnz-client' do
   self.developer 'Jeremy Wells', 'jeremy@boost.co.nz'
   self.post_install_message = 'PostInstall.txt' # TODO remove if post-install message not required
-  self.description = "Client for accessing Digital New Zealand's search API (digitalnz.org)"
+  self.description = "Ruby library for accessing Digital New Zealand's search API (digitalnz.org)"
   #self.rubyforge_name       = self.name # TODO this is default value
   self.extra_deps         = [['activesupport','>= 2.0.2'], ['nokogiri', '>= 1.2.3']]
 end

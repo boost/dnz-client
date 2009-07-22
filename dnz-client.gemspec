@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jeremy Wells"]
   s.date = %q{2009-07-22}
-  s.description = %q{Client for accessing Digital New Zealand's search API (digitalnz.org)}
+  s.description = %q{Ruby library for accessing Digital New Zealand's search API (digitalnz.org)}
   s.email = ["jeremy@boost.co.nz"]
   s.extra_rdoc_files = ["History.txt", "Manifest.txt", "PostInstall.txt", "License.txt"]
   s.files = ["History.txt", "Manifest.txt", "PostInstall.txt", "README.rdoc", "License.txt", "Rakefile", "dnz.gemspec", "lib/dnz.rb", "lib/dnz/attributes.rb", "lib/dnz/client.rb", "lib/dnz/facet.rb", "lib/dnz/result.rb", "lib/dnz/search.rb", "script/console", "script/destroy", "script/generate", "spec/dnz/client_spec.rb", "spec/dnz/result_spec.rb", "spec/dnz/search_spec.rb", "spec/spec.opts", "spec/spec_helper.rb", "tasks/rspec.rake"]
