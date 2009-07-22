@@ -1,32 +1,30 @@
-= dnz
+= DigitalNZ Client Library
 
-* http://github.com/#{github_username}/#{project_name}
-
-== DESCRIPTION:
-
-FIX (describe your package)
-
-== FEATURES/PROBLEMS:
-
-* FIX (list of features or problems)
+* http://github.com/boost/dnz-client
 
 == SYNOPSIS:
 
-  FIX (code sample of usage)
+  require 'dnz/client'
+  client = DNZ::Client.new('abcdefg') # API KEY
+  search = client.search('otago')
+  search.results.each do |result|
+    puts result.title
+  end
 
 == REQUIREMENTS:
 
-* FIX (list of requirements)
+* Nokogiri
+* ActiveSupport
 
 == INSTALL:
 
-* FIX (sudo gem install, anything else)
+* sudo gem install dnz-client / sudo gem install boost-dnz-client
 
 == LICENSE:
 
 (The MIT License)
 
-Copyright (c) 2009 FIXME full name
+Copyright (c) 2009 Boost New Media (http:/www.boost.co.nz)
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
