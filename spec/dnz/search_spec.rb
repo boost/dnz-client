@@ -47,5 +47,9 @@ describe Search do
       Facet.should_receive(:new).and_return(@facet)
       Search.new(@client, @options).facets.should == [@facet]
     end
+
+    it 'should return facets as a FacetArray' do
+      Search.new(@client, @options).facets.should be_a(FacetArray)
+    end
   end
 end

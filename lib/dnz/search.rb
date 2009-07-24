@@ -1,5 +1,6 @@
 require 'nokogiri'
 require 'dnz/result'
+require 'dnz/facet_array'
 require 'dnz/facet'
 
 begin

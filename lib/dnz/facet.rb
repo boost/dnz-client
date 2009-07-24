@@ -1,17 +1,6 @@
 require 'dnz/attributes'
 
 module DNZ
-  # @inheritDoc
-  class FacetArray < Array
-    def [](value)
-      if value.is_a?(String) || value.is_a?(Symbol)
-        self.detect{|f| f.name == value.to_s }
-      else
-        super
-      end
-    end
-  end
-
   class Facet
     attr_reader :name
     attr_reader :values
