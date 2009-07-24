@@ -21,7 +21,8 @@ module DNZ
     attr_reader :version
 
     APIS = {
-      :search => 'records/${version}.xml/'
+      :search => 'records/${version}.xml/',
+      :custom_search => 'custom_searches/${version}/${title}.xml'
     }
 
     ARGS = {
@@ -34,7 +35,7 @@ module DNZ
         :direction,
         :facets,
         :facet_num_results,
-        :facet_start
+        :facet_start,
       ])
     }
 
@@ -104,6 +105,14 @@ module DNZ
       validate_options(api, options)
 
       options = options.reverse_merge(:api_key => self.api_key)
+
+      #api_url = APIS[url]
+      #matches = (/\$\{(.*?)\}/)
+      #
+      #
+      #
+
+
       qs = options.map{|k,v| '%s=%s' % [k,v] }.join('&')
       url = self.base_url + '/' + APIS[api].gsub('${version}', self.version) + '?' + qs
       open(url)
