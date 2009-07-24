@@ -38,6 +38,11 @@ module DNZ
       ])
     }
 
+    # List of available facets that can be passed to search
+    FACETS = [
+      :category, :content_partner, :creator, :language, :rights, :century, :decade, :year
+    ]
+
     # Constructor method for the Client class. An API key must be provided.
     # The base url and version default to "http://api.digitalnz.org" and "v1".
     #
