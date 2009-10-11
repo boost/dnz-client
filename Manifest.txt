@@ -8,8 +8,10 @@ lib/dnz.rb
 lib/dnz/attributes.rb
 lib/dnz/client.rb
 lib/dnz/facet.rb
+lib/dnz/facet_array.rb
 lib/dnz/result.rb
 lib/dnz/search.rb
+lib/dnz/error/invalid_api_key.rb
 script/console
 script/destroy
 script/generate

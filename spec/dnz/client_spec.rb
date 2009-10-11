@@ -32,5 +32,12 @@ describe Client do
       end
       @client.fetch(:search, :search_text => '*:*')
     end
+    
+    it 'should raise an InvalidApiKey error if the status is 401' do
+      @client.should_receive(:open).and_raise(OpenURI::HTTPError.new('401 Unauthorized', nil))
+      lambda do
+        @client.fetch(:search, :search_text => '*:*')
+      end.should raise_error(InvalidApiKeyError)
+    end
   end
 end

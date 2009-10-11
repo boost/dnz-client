@@ -3,6 +3,7 @@ require 'open-uri'
 require 'set'
 require 'active_support'
 require 'dnz/search'
+require 'dnz/error/invalid_api_key'
 
 module DNZ
   # This is a simple client for accessing the digitalnz.org API
@@ -115,7 +116,16 @@ module DNZ
 
       qs = options.map{|k,v| '%s=%s' % [k,v] }.join('&')
       url = self.base_url + '/' + APIS[api].gsub('${version}', self.version) + '?' + qs
-      open(url)
+      
+      begin
+        open(url)
+      rescue OpenURI::HTTPError => e
+        if e.to_s =~ /^401/
+          raise InvalidApiKeyError.new(self.api_key)
+        else
+          raise
+        end
+      end
     end
 
     private
