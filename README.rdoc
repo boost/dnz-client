@@ -18,7 +18,7 @@
 
 == INSTALL:
 
-* sudo gem install dnz-client / sudo gem install boost-dnz-client
+* sudo gem install dnz-client
 
 == LICENSE:
 
