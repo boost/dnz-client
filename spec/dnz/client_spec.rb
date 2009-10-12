@@ -28,7 +28,7 @@ describe Client do
       @client.should_receive(:open).with do |url|
         url.should include('http://api.digitalnz.org/records/v1.xml/?')
         url.should include('api_key=abc')
-        url.should include('search_text=*:*')
+        url.should include('search_text=%2A%3A%2A')
       end
       @client.fetch(:search, :search_text => '*:*')
     end

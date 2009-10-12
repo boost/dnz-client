@@ -27,17 +27,19 @@ module DNZ
     }
 
     ARGS = {
-      :search => Set.new([
-        :search_text,
-        :api_key,
-        :num_results,
-        :start,
-        :sort,
-        :direction,
-        :facets,
-        :facet_num_results,
-        :facet_start,
-      ])
+      :v1 => {
+        :search => Set.new([
+          :search_text,
+          :api_key,
+          :num_results,
+          :start,
+          :sort,
+          :direction,
+          :facets,
+          :facet_num_results,
+          :facet_start,
+        ])
+      }
     }
 
     # List of available facets that can be passed to search
@@ -78,6 +80,7 @@ module DNZ
     # * <tt>:num_results</tt> - The number of results to return in this call. Defaults to 20.
     # * <tt>:start</tt> - The starting offset of the results.
     # * <tt>:facets</tt> - The facets to return for this search.
+    # * <tt>:filter</tt> - A hash of filters to apply to the results
     #
     # ==== Example
     #   search = client.search('rubgy', :num_results => 50)
@@ -88,7 +91,8 @@ module DNZ
       options.reverse_merge!(
         :search_text => text,
         :num_results => 20,
-        :start => 0
+        :start => 0,
+        :filter => {}
       )
 
       # Select the correct page
@@ -113,8 +117,8 @@ module DNZ
       #
       #
 
-
-      qs = options.map{|k,v| '%s=%s' % [k,v] }.join('&')
+      # qs = options.map{|k,v| '%s=%s' % [k,v] }.join('&')
+      qs = options.to_query
       url = self.base_url + '/' + APIS[api].gsub('${version}', self.version) + '?' + qs
       
       begin
@@ -131,10 +135,12 @@ module DNZ
     private
 
     def validate_options(path, options = {})
-      options.symbolize_keys!
+      options = options.symbolize_keys
+      
+      version_args = ARGS[@version.to_sym]
 
-      if ARGS.has_key?(path) && !Set.new(options.keys).subset?(ARGS[path])
-        raise ArgumentError.new("Valid options for #{path} are: #{ARGS[path].to_a.join(', ')}, provided: #{options.keys.join(', ')}")
+      if version_args.has_key?(path) && !Set.new(options.keys).subset?(version_args[path])
+        raise ArgumentError.new("Valid options for #{path} are: #{version_args[path].to_a.join(', ')}, provided: #{options.keys.join(', ')}")
       end
     end
   end

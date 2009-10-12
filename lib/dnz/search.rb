@@ -18,6 +18,8 @@ module DNZ
   #   puts "%d results found on %d pages" % [search.result_count, search.pages]
   class Search
     attr_reader :result_count
+    
+    extend ActiveSupport::Memoizable
 
     # Constructor for Search class. Do not call this directly, instead use the <tt>Client.search</tt> method.
     def initialize(client, search_options)
@@ -39,11 +41,6 @@ module DNZ
 
     # An array of results. If the mislav-will_paginate gem is installed this will return a paginated array.
     def results
-      if @results.nil?
-        parse_results
-        paginate_results if defined? WillPaginate::Collection
-      end
-
       @results
     end
 
@@ -56,7 +53,6 @@ module DNZ
     #     puts '%d results in category %s' % [category.count, category.name]
     #   end
     def facets
-      parse_facets if @facets.nil?
       @facets
     end
 
@@ -93,6 +89,39 @@ module DNZ
     end
 
     private
+    
+    def parsed_search_filter
+      filter = @search_options[:filter]
+      filter = {} unless filter.is_a?(Hash)
+      filter.symbolize_keys!
+      filter.map{|k,v| '%s:"%s"' % [k,v]}
+    end
+    memoize :parsed_search_filter
+    
+    def parsed_search_text
+      if parsed_search_filter.any?
+        ([text] + parsed_search_filter).join(' AND ')
+      else
+        text
+      end
+    end
+    
+    def parsed_search_facets
+      search_facets = @search_options[:facets] || []
+      search_facets = search_facets.join(',') if search_facets.is_a?(Array)
+      search_facets
+    end
+    
+    def parsed_search_options
+      parsed_options = @search_options.dup
+      parsed_options.delete(:filter)
+    
+      parsed_options[:search_text] = parsed_search_text
+      parsed_options[:facets] = parsed_search_facets
+      
+      parsed_options
+    end
+    memoize :parsed_search_options
 
     def doc
       @doc ||= Nokogiri::XML(@xml)
@@ -102,9 +131,12 @@ module DNZ
       @doc = nil
       @results = nil
       @facets = nil
-      @xml = @client.send(:fetch, :search, @search_options)
+      @xml = @client.send(:fetch, :search, parsed_search_options)
 
       parse_attributes
+      parse_facets
+      parse_results
+      paginate_results if defined? WillPaginate::Collection
 
       self
     end
@@ -132,7 +164,7 @@ module DNZ
       end
     end
 
-    def parse_facets
+    def parse_facets      
       @facets = FacetArray.new
 
       doc.xpath('//facets/facet').each do |facet_xml|

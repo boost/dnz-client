@@ -34,7 +34,7 @@ describe Search do
 
   describe 'Search.new' do
     it 'should call @client.fetch' do
-      @client.should_receive(:fetch).with(:search, :search_text => 'test').and_return(@xml)
+      @client.should_receive(:fetch).with(:search, :search_text => 'test', :facets => "").and_return(@xml)
       Search.new(@client, @options)
     end
 
@@ -50,6 +50,21 @@ describe Search do
 
     it 'should return facets as a FacetArray' do
       Search.new(@client, @options).facets.should be_a(FacetArray)
+    end
+  end
+  
+  describe 'filtering' do
+    before do
+      @options = {:search_text => 'test', :filter => {:category => 'Images'}}
+    end
+    
+    it 'should call @client.fetch with the search text set to \'test AND category:"Images"\'' do
+      @client.should_receive(:fetch).with(
+        :search,
+        :search_text => 'test AND category:"Images"',
+        :facets => ""
+      ).and_return(@xml)
+      Search.new(@client, @options)
     end
   end
 end

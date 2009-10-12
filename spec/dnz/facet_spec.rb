@@ -32,21 +32,37 @@ describe Facet do
       @facet.name.should == 'My name'
     end
 
-    it 'should have an array of values' do
-      @facet.values.should be_a(Array)
-    end
+    describe '#values' do
+      it 'should have an array of values' do
+        @facet.values.should be_a(Array)
+      end
 
-    it 'should have one value' do
-      @facet.values.size.should == 1
-    end
+      it 'should have one value' do
+        @facet.values.size.should == 1
+      end
 
-    it 'should have a value with name Value name' do
-      @facet.values.first.name.should == 'Value name'
-    end
+      it 'should have a value with name Value name' do
+        @facet.values.first.name.should == 'Value name'
+      end
 
-    it 'should have a value with 23 results' do
-      @facet.values.first.count.should == 23
+      it 'should have a value with 23 results' do
+        @facet.values.first.count.should == 23
+      end
     end
-
+    
+    describe '#[]' do
+      it 'should return the facet by name index' do
+        @facet['Value name'].name.should == 'Value name'
+        @facet['Value name'].count.should == 23
+      end
+    end
+    
+    describe '#each' do
+      it 'should loop over the values' do
+        @facet.each do |value|
+          value.name.should == 'Value name'
+        end
+      end
+    end
   end
 end

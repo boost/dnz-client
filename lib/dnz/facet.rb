@@ -5,16 +5,38 @@ module DNZ
     attr_reader :name
     attr_reader :values
     attr_reader :search
+    
+    include Enumerable
 
     def initialize(client, search, doc)
       @name = doc.xpath('facet-field').text
-      @values = []
+      @values = {}
       @search = search
 
       doc.xpath('values').first.children.each do |value_doc|
         value = DNZ::FacetValue.new(client, self, value_doc)
-        @values << value if value.valid?
+        @values[value.name] = value if value.valid?
       end
+    end
+    
+    def values
+      @values.values
+    end
+    
+    def [](index)
+      @values[index]
+    end
+    
+    def each
+      @values.each {|key, value| yield value }
+    end
+    
+    def to_s
+      values.join(', ')
+    end
+    
+    def inspect
+      '[ %s ]' % values.collect(&:inspect).join(', ')
     end
   end
 
@@ -42,7 +64,7 @@ module DNZ
     end
 
     def to_s
-      self.name
+      '%s => %d' % [self.name, self.count]
     end
   end
 end

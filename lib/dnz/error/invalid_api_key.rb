@@ -1,11 +1,13 @@
-class InvalidApiKeyError < RuntimeError
-  attr_reader :api_key
+module DNZ
+  class InvalidApiKeyError < RuntimeError
+    attr_reader :api_key
   
-  def initialize(api_key)
-    @api_key = api_key
-  end
+    def initialize(api_key)
+      @api_key = api_key
+    end
   
-  def to_s
-    "Invalid API key: #{api_key}"
+    def to_s
+      "Invalid API key: #{api_key}"
+    end
   end
 end
