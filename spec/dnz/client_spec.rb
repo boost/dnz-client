@@ -40,4 +40,25 @@ describe Client do
       end.should raise_error(InvalidApiKeyError)
     end
   end
+  
+  describe '#categories' do
+    before do
+      @categories = mock(:categories)
+      @category = mock(:facet)
+      @category.stub!(:values).and_return(@categories)
+      @facets = mock(:facets)
+      @facets.stub!(:[]).with('category').and_return(@category)
+      @search.stub!(:facets).and_return(@facets)
+      @client.stub!(:search).and_return(@search)
+    end
+    
+    it 'should run a search for categories facet' do
+      @client.should_receive(:search).with('*:*', :facets => 'category', :facet_num_results => 100).and_return(@search)
+      @client.categories
+    end
+    
+    it 'should return the categories facet' do
+      @client.categories.should == @categories
+    end
+  end
 end
