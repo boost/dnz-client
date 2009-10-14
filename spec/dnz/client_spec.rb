@@ -10,6 +10,91 @@ describe Client do
     @search = mock(:search)
     DNZ::Search.stub!(:new).and_return(@search)
   end
+  
+  describe 'APIs' do
+    describe 'v1' do
+      before do
+        @version = 'v1'
+        @client = Client.new('abc', @version)
+        @client.stub!(:open) # make sure open is never called
+      end
+      
+      describe 'search' do        
+        [:search_text,:api_key,:num_results,:start,:sort,:direction,:facets,:facet_num_results,:facet_start].each do |option|
+          it "should allow #{option}" do
+            lambda do
+              @client.send(:fetch, :search, {option => "test"})
+            end.should_not raise_error(ArgumentError)
+          end
+        end 
+      end
+      
+      describe 'custom_search' do
+        it 'should require custom_search' do
+          lambda do
+            @client.send(:fetch, :custom_search, {}) 
+          end.should raise_error(ArgumentError, "Required argument missing: custom_search")
+        end
+        
+        [:search_text,:api_key,:num_results,:start,:sort,:direction].each do |option|
+          it "should allow #{option}" do
+            lambda do
+              @client.send(:fetch, :custom_search, {:custom_search => "test", option => "test"})
+            end.should_not raise_error(ArgumentError)
+          end
+        end
+        [:facets,:facet_num_results,:facet_start].each do |option|
+          it "should not allow #{option}" do
+            lambda do
+              @client.send(:fetch, :custom_search, {:custom_search => "test", option => "test"})
+            end.should raise_error(ArgumentError)
+          end
+        end
+      end
+    end
+    
+    describe 'v2' do
+      before do
+        @version = 'v2'
+        @client = Client.new('abc', @version)
+        @client.stub!(:open) # make sure open is never called
+      end
+      
+      describe 'search' do
+        [:search_text,:api_key,:num_results,:start,:sort,:direction,:facets,:facet_num_results,:facet_start].each do |option|
+          it "should allow #{option}" do
+            lambda do
+              @client.send(:fetch, :search, {})
+            end.should_not raise_error(ArgumentError)
+          end
+        end 
+      end
+      
+      describe 'custom_search' do
+        it 'should require custom_search' do
+          lambda do
+            @client.send(:fetch, :custom_search, {}) 
+          end.should raise_error(ArgumentError, "Required argument missing: custom_search")
+        end
+        
+        [:search_text,:api_key,:num_results,:start,:sort,:direction].each do |option|
+          it "should allow #{option}" do
+            lambda do
+              @client.send(:fetch, :custom_search, {:custom_search => "test", option => "test"})
+            end.should_not raise_error(ArgumentError)
+          end
+        end
+        [:facets,:facet_num_results,:facet_start].each do |option|
+          it "should allow #{option}" do
+            lambda do
+              @client.send(:fetch, :custom_search, {:custom_search => "test", option => "test"})
+            end.should_not raise_error(ArgumentError)
+          end
+        end
+      end
+    end
+  end
+  
 
   describe '#search' do
     it 'should create a new search object and return it' do

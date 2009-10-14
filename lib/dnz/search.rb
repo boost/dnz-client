@@ -18,6 +18,7 @@ module DNZ
   #   search = client.search('text')
   #   puts "%d results found on %d pages" % [search.result_count, search.pages]
   class Search
+    # The total number of results returned by the search
     attr_reader :result_count
     
     extend DNZ::Memoizable
@@ -88,6 +89,10 @@ module DNZ
         :pages => self.pages
       }.inspect
     end
+    
+    def custom_search?
+      !@search_options.has_key?(:custom_search)
+    end
 
     private
     
@@ -127,12 +132,19 @@ module DNZ
     def doc
       @doc ||= Nokogiri::XML(@xml)
     end
+    
+    def execute_action
+      if custom_search?
+        :search
+      else
+        :custom_search
+      end
+    end
 
     def execute
-      @doc = nil
-      @results = nil
-      @facets = nil
-      @xml = @client.send(:fetch, :search, parsed_search_options)
+      reset
+      
+      @xml = @client.send(:fetch, execute_action, parsed_search_options)
 
       parse_attributes
       parse_facets
@@ -140,6 +152,12 @@ module DNZ
       paginate_results if defined? WillPaginate::Collection
 
       self
+    end
+    
+    def reset
+      @doc = nil
+      @results = nil
+      @facets = nil
     end
 
     def paginate_results

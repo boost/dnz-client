@@ -23,7 +23,7 @@ module DNZ
 
     APIS = {
       :search => 'records/${version}.xml/',
-      :custom_search => 'custom_searches/${version}/${title}.xml'
+      :custom_search => 'custom_searches/${version}/${custom_search}.xml'
     }
 
     ARGS = {
@@ -37,9 +37,43 @@ module DNZ
           :direction,
           :facets,
           :facet_num_results,
-          :facet_start,
+          :facet_start
+        ]),
+        :custom_search => Set.new([
+          :custom_search,
+          :search_text,
+          :api_key,
+          :num_results,
+          :start,
+          :sort,
+          :direction
         ])
-      }
+      },
+      :v2 => {
+        :search => Set.new([
+          :search_text,
+          :api_key,
+          :num_results,
+          :start,
+          :sort,
+          :direction,
+          :facets,
+          :facet_num_results,
+          :facet_start
+        ]),
+        :custom_search => Set.new([
+          :custom_search,
+          :search_text,
+          :api_key,
+          :num_results,
+          :start,
+          :sort,
+          :direction,
+          :facets,
+          :facet_num_results,
+          :facet_start
+        ])
+      }      
     }
 
     # List of available facets that can be passed to search
@@ -56,7 +90,7 @@ module DNZ
     #   search.results.each do |result|
     #     puts result.title
     #   end
-    def initialize(api_key, base_url = 'http://api.digitalnz.org', version = 'v1')
+    def initialize(api_key, version = 'v1', base_url = 'http://api.digitalnz.org')
       @api_key = api_key
       @base_url = base_url
       @version = version
@@ -110,16 +144,8 @@ module DNZ
       validate_options(api, options)
 
       options = options.reverse_merge(:api_key => self.api_key)
-
-      #api_url = APIS[url]
-      #matches = (/\$\{(.*?)\}/)
-      #
-      #
-      #
-
-      # qs = options.map{|k,v| '%s=%s' % [k,v] }.join('&')
-      qs = options.to_query
-      url = self.base_url + '/' + APIS[api].gsub('${version}', self.version) + '?' + qs
+      
+      url = create_url(api, options)
       
       begin
         open(url)
@@ -133,13 +159,35 @@ module DNZ
     end
 
     private
+    
+    def create_url(api, options)
+      options = options.symbolize_keys
+      options[:version] = self.version
+      
+      path = APIS[api].dup
+      variable_regex = /\$\{(.+?)\}/m
+      
+      while match = variable_regex.match(path)
+        variable_name = $1.to_sym
+                
+        if options.has_key?(variable_name)
+          path.sub!(variable_regex, options.delete(variable_name))
+        else
+          raise ArgumentError.new("Required argument missing: #{variable_name}")
+        end
+      end
+      
+      url = self.base_url + '/' + path
+      url + '?' + options.to_query
+    end
 
     def validate_options(path, options = {})
       options = options.symbolize_keys
-      
       version_args = ARGS[@version.to_sym]
-
-      if version_args.has_key?(path) && !Set.new(options.keys).subset?(version_args[path])
+      
+      if !version_args
+        raise ArgumentError.new("Invalid version API call: #{@version}, #{path}")
+      elsif version_args.has_key?(path) && !Set.new(options.keys).subset?(version_args[path])
         raise ArgumentError.new("Valid options for #{path} are: #{version_args[path].to_a.join(', ')}, provided: #{options.keys.join(', ')}")
       end
     end
