@@ -143,7 +143,10 @@ module DNZ
     def fetch(api, options = {})
       validate_options(api, options)
 
-      options = options.reverse_merge(:api_key => self.api_key)
+      options = options.reverse_merge(
+        :api_key => self.api_key,
+        :version => self.version
+      )
       
       url = create_url(api, options)
       
@@ -160,9 +163,12 @@ module DNZ
 
     private
     
+    # Create a URL for a given API call with a hash of option
+    #
+    # * <tt>api</tt> - The api call to make. This must be listed in the APIS constant.
+    # * <tt>options</tt> - A hash of options.
     def create_url(api, options)
       options = options.symbolize_keys
-      options[:version] = self.version
       
       path = APIS[api].dup
       variable_regex = /\$\{(.+?)\}/m
@@ -181,14 +187,15 @@ module DNZ
       url + '?' + options.to_query
     end
 
-    def validate_options(path, options = {})
+    # Validate an options hash for a given api
+    def validate_options(api, options = {})
       options = options.symbolize_keys
       version_args = ARGS[@version.to_sym]
       
       if !version_args
-        raise ArgumentError.new("Invalid version API call: #{@version}, #{path}")
-      elsif version_args.has_key?(path) && !Set.new(options.keys).subset?(version_args[path])
-        raise ArgumentError.new("Valid options for #{path} are: #{version_args[path].to_a.join(', ')}, provided: #{options.keys.join(', ')}")
+        raise ArgumentError.new("Invalid version API call: #{@version}, #{api}")
+      elsif version_args.has_key?(api) && !Set.new(options.keys).subset?(version_args[api])
+        raise ArgumentError.new("Valid options for #{api} are: #{version_args[api].to_a.join(', ')}, provided: #{options.keys.join(', ')}")
       end
     end
   end
