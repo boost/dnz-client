@@ -2,6 +2,7 @@ require 'nokogiri'
 require 'dnz/result'
 require 'dnz/facet_array'
 require 'dnz/facet'
+require 'dnz/memoizable'
 
 begin
   gem 'mislav-will_paginate' rescue nil
@@ -19,7 +20,7 @@ module DNZ
   class Search
     attr_reader :result_count
     
-    extend ActiveSupport::Memoizable
+    extend DNZ::Memoizable
 
     # Constructor for Search class. Do not call this directly, instead use the <tt>Client.search</tt> method.
     def initialize(client, search_options)
