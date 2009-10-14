@@ -1,7 +1,8 @@
 === 0.0.5 2009-09-15
 
-* Support for custom_search API calls
-* Experimental support for beta API v2
+* Support for custom_search API calls.
+* Experimental support for beta API v2.
+* WARNING: Client.new signature has changed.
 
 === 0.0.4 2009-09-14
 
