@@ -115,6 +115,7 @@ module DNZ
     # * <tt>:start</tt> - The starting offset of the results.
     # * <tt>:facets</tt> - The facets to return for this search.
     # * <tt>:filter</tt> - A hash of filters to apply to the results
+    # * <tt>:custom_search</tt> - The name of a custom search created at http://digitalnz.org
     #
     # ==== Example
     #   search = client.search('rubgy', :num_results => 50)

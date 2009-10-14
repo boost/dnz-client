@@ -4,6 +4,8 @@ require 'dnz/facet_array'
 require 'dnz/facet'
 require 'dnz/memoizable'
 
+# Load will_paginate if it's available
+# to provide pagination
 begin
   gem 'mislav-will_paginate' rescue nil
   require 'will_paginate/collection' rescue nil
@@ -90,12 +92,15 @@ module DNZ
       }.inspect
     end
     
+    # Return true if this search is using a custom search engine
     def custom_search?
       !@search_options.has_key?(:custom_search)
     end
 
     private
     
+    # Turn the filter hash into an array of strings
+    # in the format key:"value"
     def parsed_search_filter
       filter = @search_options[:filter]
       filter = {} unless filter.is_a?(Hash)
@@ -104,6 +109,7 @@ module DNZ
     end
     memoize :parsed_search_filter
     
+    # Join the search text with any filters with " AND "
     def parsed_search_text
       if parsed_search_filter.any?
         ([text] + parsed_search_filter).join(' AND ')
@@ -112,12 +118,15 @@ module DNZ
       end
     end
     
+    # The facets option gets turned into a comma separated string
     def parsed_search_facets
       search_facets = @search_options[:facets] || []
       search_facets = search_facets.join(',') if search_facets.is_a?(Array)
       search_facets
     end
     
+    # Turn the options into options acceptable for an API call.
+    # Removes the filter option and parses the other options.
     def parsed_search_options
       parsed_options = @search_options.dup
       parsed_options.delete(:filter)
@@ -129,10 +138,13 @@ module DNZ
     end
     memoize :parsed_search_options
 
+    # Return a Nokogiri document for the XML
     def doc
       @doc ||= Nokogiri::XML(@xml)
     end
     
+    # Choose which API call to make, either search or
+    # custom_search if a custom search engine is specified.
     def execute_action
       if custom_search?
         :search
@@ -141,11 +153,13 @@ module DNZ
       end
     end
 
+    # Execute the search by making the API call
     def execute
       reset
       
       @xml = @client.send(:fetch, execute_action, parsed_search_options)
 
+      # Parse the results
       parse_attributes
       parse_facets
       parse_results
@@ -154,18 +168,21 @@ module DNZ
       self
     end
     
+    # Reset important instance variables
     def reset
       @doc = nil
       @results = nil
       @facets = nil
     end
 
+    # Replace the results array with a paginated array
     def paginate_results
       @results = WillPaginate::Collection.create(self.page, num_results_requested, self.result_count) do |pager|
         pager.replace @results
       end
     end
 
+    # Parse important global attributes into instance variables
     def parse_attributes
       %w(num-results-requested result-count start).each do |node|
         if child = doc.root.xpath(node).first
@@ -176,13 +193,15 @@ module DNZ
       end
     end
 
+    # Parse the results into an array of DNZ::Result
     def parse_results
       @results = []
       doc.xpath('//results/result').each do |result_xml|
         @results << DNZ::Result.new(result_xml)
       end
     end
-
+    
+    # Parse the facets into an array of DNZ::FacetArray
     def parse_facets      
       @facets = FacetArray.new
 
