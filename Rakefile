@@ -16,6 +16,7 @@ $hoe = Hoe.spec 'dnz-client' do
   self.description = "Ruby library for accessing Digital New Zealand's search API (digitalnz.org)"
   #self.rubyforge_name       = self.name # TODO this is default value
   self.extra_deps         = [['activesupport','>= 2.0.2'], ['nokogiri', '>= 1.2.3']]
+  self.extra_rdoc_files   << 'README.rdoc'
 end
 
 require 'newgem/tasks'

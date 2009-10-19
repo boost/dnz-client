@@ -21,11 +21,13 @@ module DNZ
     # The version of the API to use (defaults to v1)
     attr_reader :version
 
+    # API URLS
     APIS = {
       :search => 'records/${version}.xml/',
       :custom_search => 'custom_searches/${version}/${custom_search}.xml'
     }
 
+    # API Arguments
     ARGS = {
       :v1 => {
         :search => Set.new([
