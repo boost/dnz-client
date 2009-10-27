@@ -4,6 +4,7 @@ require 'set'
 require 'active_support'
 require 'dnz/search'
 require 'dnz/error/invalid_api_key'
+require 'dnz/record'
 
 module DNZ
   # This is a simple client for accessing the digitalnz.org API
@@ -24,7 +25,8 @@ module DNZ
     # API URLS
     APIS = {
       :search => 'records/${version}.xml/',
-      :custom_search => 'custom_searches/${version}/${custom_search}.xml'
+      :custom_search => 'custom_searches/${version}/${custom_search}.xml',
+      :record => 'records/${version}/${id}.xml'
     }
 
     # API Arguments
@@ -49,6 +51,9 @@ module DNZ
           :start,
           :sort,
           :direction
+        ]),
+        :record => Set.new([
+          :id
         ])
       },
       :v2 => {
@@ -74,7 +79,10 @@ module DNZ
           :facets,
           :facet_num_results,
           :facet_start
-        ])
+        ]),
+        :record => Set.new([
+          :id
+        ])        
       }      
     }
 
@@ -138,6 +146,15 @@ module DNZ
 
       DNZ::Search.new(self, options)
     end  
+    
+    def record(id)
+      data = fetch(:record, {:id => id})
+      if data
+        DNZ::Record::Base.new(id, data.read)
+      else
+        nil
+      end
+    end
 
     # Make a direct call to the digitalnz.org API.
     #
@@ -145,7 +162,7 @@ module DNZ
     # * <tt>options</tt> - A hash of options to pass to the API call. These options must be defined in the ARGS constant.
     def fetch(api, options = {})
       validate_options(api, options)
-
+      
       options = options.reverse_merge(
         :api_key => self.api_key,
         :version => self.version
@@ -180,7 +197,7 @@ module DNZ
         variable_name = $1.to_sym
                 
         if options.has_key?(variable_name)
-          path.sub!(variable_regex, options.delete(variable_name))
+          path.sub!(variable_regex, options.delete(variable_name).to_s)
         else
           raise ArgumentError.new("Required argument missing: #{variable_name}")
         end
