@@ -9,6 +9,10 @@ lib/dnz/attributes.rb
 lib/dnz/client.rb
 lib/dnz/facet.rb
 lib/dnz/facet_array.rb
+lib/dnz/record.rb
+lib/dnz/record/metadata.rb
+lib/dnz/record/metadata_array.rb
+lib/dnz/record/namespace_array.rb
 lib/dnz/result.rb
 lib/dnz/search.rb
 lib/dnz/memoizable.rb
