@@ -54,14 +54,25 @@ describe Search do
   end
   
   describe 'filtering' do
-    before do
-      @options = {:search_text => 'test', :filter => {:category => 'Images'}}
-    end
+    #before do
+    #  @options = {:search_text => 'test', :filter => {:category => 'Images'}}
+    #end
     
     it 'should call @client.fetch with the search text set to \'test AND category:"Images"\'' do
+      @options = {:search_text => 'test', :filter => {:category => 'Images'}}
       @client.should_receive(:fetch).with(
         :search,
         :search_text => 'test AND category:"Images"',
+        :facets => ""
+      ).and_return(@xml)
+      Search.new(@client, @options)
+    end
+    
+    it 'should call @client.fetch with the search text set to \'test AND (category:"Images" OR category:"Videos"\'' do
+      @options = {:search_text => 'test', :filter => {:category => ['Images', 'Videos']}}
+      @client.should_receive(:fetch).with(
+        :search,
+        :search_text => 'test AND (category:"Images" OR category:"Videos")',
         :facets => ""
       ).and_return(@xml)
       Search.new(@client, @options)

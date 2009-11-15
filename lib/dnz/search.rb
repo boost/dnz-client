@@ -105,7 +105,14 @@ module DNZ
       filter = @search_options[:filter]
       filter = {} unless filter.is_a?(Hash)
       filter.symbolize_keys!
-      filter.map{|k,v| '%s:"%s"' % [k,v]}
+      filter.map do |k,v|         
+        if v.is_a?(Array)
+          #OR togehter multiple values for the same filter
+          '(' + v.map{|i| '%s:"%s"' % [k,i]}.join(' OR ') + ')'
+        else
+          '%s:"%s"' % [k,v]
+        end
+      end
     end
     memoize :parsed_search_filter
     
