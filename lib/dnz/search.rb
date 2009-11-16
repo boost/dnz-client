@@ -75,7 +75,7 @@ module DNZ
 
     # The number of pages available for the current search.
     def pages
-      num_results_requested < result_count ? (result_count.to_f / num_results_requested).ceil : 0
+      num_results_requested < result_count ? (result_count.to_f / num_results_requested).ceil : 1
     end
 
     # The number of results requested via the :num_results option (see <tt>Client.search</tt>).
@@ -89,10 +89,11 @@ module DNZ
 
     def to_s
       {
-        :results => self.results.length,
+        :results => self.result_count,
         :facets => self.facets.length,
         :page => self.page,
-        :pages => self.pages
+        :pages => self.pages,
+        :per_page => self.num_results_requested
       }.inspect
     end
     
