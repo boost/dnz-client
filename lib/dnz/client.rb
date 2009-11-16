@@ -116,14 +116,21 @@ module DNZ
     # * <tt>:num_results</tt> - The number of results to return in this call. Defaults to 20.
     # * <tt>:start</tt> - The starting offset of the results.
     # * <tt>:facets</tt> - The facets to return for this search.
-    # * <tt>:filter</tt> - A hash of filters to apply to the results
+    # * <tt>:filter</tt> - A hash of filters to apply to the results. Filters can be a string value or
+    #   an array of string values.
     # * <tt>:custom_search</tt> - The name of a custom search created at http://digitalnz.org
     #
     # ==== Example
-    #   search = client.search('rubgy', :num_results => 50)
+    #   search = client.search('rugby', :num_results => 50)
     #   search.results.each_with_index do |result, index|
     #     puts "#{index+1}: #{result.title}"
     #   end
+    #
+    # ==== Filter example
+    # This example will search for rugby items with the category Images or Web pages.
+    #
+    #   search = client.search('rugby', :filter => {:category => ['Images', 'Web pages']})
+    #
     def search(text, options = {})
       options.reverse_merge!(
         :search_text => text,

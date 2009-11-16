@@ -107,7 +107,7 @@ module DNZ
       filter.symbolize_keys!
       filter.map do |k,v|         
         if v.is_a?(Array)
-          #OR togehter multiple values for the same filter
+          # OR together multiple values for the same filter
           '(' + v.map{|i| '%s:"%s"' % [k,i]}.join(' OR ') + ')'
         else
           '%s:"%s"' % [k,v]
