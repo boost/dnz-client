@@ -83,6 +83,10 @@ module DNZ
       @num_results_requested || 20
     end
 
+    def inspect
+      self.to_s
+    end
+
     def to_s
       {
         :results => self.results.length,
