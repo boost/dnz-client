@@ -1,3 +1,7 @@
+=== 0.0.7 2009-11-16
+
+* Support for multiple values in a filter
+
 === 0.0.5 2009-09-15
 
 * Support for custom_search API calls.

@@ -4,5 +4,5 @@ $:.unshift(File.dirname(__FILE__)) unless
 require 'dnz/client'
 
 module Dnz
-  VERSION = '0.0.5'
+  VERSION = '0.0.7'
 end
