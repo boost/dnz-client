@@ -22,7 +22,7 @@ module DNZ
   class Search
     # The total number of results returned by the search
     attr_reader :result_count
-    
+
     extend DNZ::Memoizable
 
     # Constructor for Search class. Do not call this directly, instead use the <tt>Client.search</tt> method.
@@ -83,32 +83,38 @@ module DNZ
       @num_results_requested || 20
     end
 
+    def inspect
+      self.to_s
+    end
+
     def to_s
       {
-        :results => self.results.length,
-        :facets => self.facets.length,
-        :page => self.page,
-        :pages => self.pages
+              :total_results => self.result_count,
+              :results => self.results.length,
+              :facets => self.facets.length,
+              :page => self.page,
+              :pages => self.pages
       }.inspect
     end
-    
+
     # Return true if this search is using a custom search engine
     def custom_search?
       !@search_options.has_key?(:custom_search)
     end
 
     private
-    
+
     # Turn the filter hash into an array of strings
     # in the format key:"value"
     def parsed_search_filter
       filter = @search_options[:filter]
       filter = {} unless filter.is_a?(Hash)
       filter.symbolize_keys!
-      filter.map{|k,v| '%s:"%s"' % [k,v]}
+      filter.map{|k, v| '%s:"%s"' % [k, v]}
     end
+
     memoize :parsed_search_filter
-    
+
     # Join the search text with any filters with " AND "
     def parsed_search_text
       if parsed_search_filter.any?
@@ -117,32 +123,33 @@ module DNZ
         text
       end
     end
-    
+
     # The facets option gets turned into a comma separated string
     def parsed_search_facets
       search_facets = @search_options[:facets] || []
       search_facets = search_facets.join(',') if search_facets.is_a?(Array)
       search_facets
     end
-    
+
     # Turn the options into options acceptable for an API call.
     # Removes the filter option and parses the other options.
     def parsed_search_options
       parsed_options = @search_options.dup
       parsed_options.delete(:filter)
-    
+
       parsed_options[:search_text] = parsed_search_text
       parsed_options[:facets] = parsed_search_facets
-      
+
       parsed_options
     end
+
     memoize :parsed_search_options
 
     # Return a Nokogiri document for the XML
     def doc
       @doc ||= Nokogiri::XML(@xml)
     end
-    
+
     # Choose which API call to make, either search or
     # custom_search if a custom search engine is specified.
     def execute_action
@@ -156,7 +163,7 @@ module DNZ
     # Execute the search by making the API call
     def execute
       reset
-      
+
       @xml = @client.send(:fetch, execute_action, parsed_search_options)
 
       # Parse the results
@@ -167,7 +174,7 @@ module DNZ
 
       self
     end
-    
+
     # Reset important instance variables
     def reset
       @doc = nil
@@ -200,9 +207,9 @@ module DNZ
         @results << DNZ::Result.new(result_xml)
       end
     end
-    
+
     # Parse the facets into an array of DNZ::FacetArray
-    def parse_facets      
+    def parse_facets
       @facets = FacetArray.new
 
       doc.xpath('//facets/facet').each do |facet_xml|
