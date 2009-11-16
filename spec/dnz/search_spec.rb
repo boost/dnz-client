@@ -54,10 +54,6 @@ describe Search do
   end
   
   describe 'filtering' do
-    #before do
-    #  @options = {:search_text => 'test', :filter => {:category => 'Images'}}
-    #end
-    
     it 'should call @client.fetch with the search text set to \'test AND category:"Images"\'' do
       @options = {:search_text => 'test', :filter => {:category => 'Images'}}
       @client.should_receive(:fetch).with(
