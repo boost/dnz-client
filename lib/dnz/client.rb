@@ -116,9 +116,9 @@ module DNZ
     # * <tt>:num_results</tt> - The number of results to return in this call. Defaults to 20.
     # * <tt>:start</tt> - The starting offset of the results.
     # * <tt>:facets</tt> - The facets to return for this search.
-    # * <tt>:filter</tt> - A hash of filters to apply to the results
+    # * <tt>:filter</tt> - A hash of filters to apply to the results - results must belong to ALL of these filters
     # * <tt>:custom_search</tt> - The name of a custom search created at http://digitalnz.org
-    #
+    # * <tt>:collections</tt> - A hash of filters to apply to the results - results can belon to 1 or more if these filters
     # ==== Example
     #   search = client.search('rubgy', :num_results => 50)
     #   search.results.each_with_index do |result, index|
@@ -129,7 +129,8 @@ module DNZ
         :search_text => text,
         :num_results => 20,
         :start => 0,
-        :filter => {}
+        :filter => {},
+        :collection => {}
       )
 
       # Select the correct page

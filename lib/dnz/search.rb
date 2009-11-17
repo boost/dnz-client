@@ -105,24 +105,47 @@ module DNZ
       filter = @search_options[:filter]
       filter = {} unless filter.is_a?(Hash)
       filter.symbolize_keys!
-      filter.map do |k,v|         
-        if v.is_a?(Array)
-          #OR togehter multiple values for the same filter
-          '(' + v.map{|i| '%s:"%s"' % [k,i]}.join(' OR ') + ')'
-        else
-          '%s:"%s"' % [k,v]
-        end
+      filter.map{|k,v| format_key_value(k,v)}
+    end
+    memoize :parsed_search_filter         
+    
+    
+    # Turn the search_collection hash into a string into a string with
+    # the format in the format key:"value" OR key:"value"
+    def parsed_search_collection
+      collection = @search_options[:collection]
+      collection = {} unless collection.is_a?(Hash)
+      collection.symbolize_keys!
+      map = collection.map{|k,v| format_key_value(k,v)}.join(' OR ')
+      unless map.blank?
+        '(' + map + ')'
+      else
+        nil
       end
     end
-    memoize :parsed_search_filter
+    memoize :parsed_search_collection
     
     # Join the search text with any filters with " AND "
     def parsed_search_text
-      if parsed_search_filter.any?
-        ([text] + parsed_search_filter).join(' AND ')
+      if parsed_search_filter.any? || !parsed_search_collection.blank?
+        search_query = []
+        search_query << [text]
+        search_query << parsed_search_filter if parsed_search_filter.any?
+        search_query << parsed_search_collection unless parsed_search_collection.blank?
+        search_query.join(' AND ')
       else
         text
       end
+    end
+    
+    # format key value pairs into solr search format
+    def format_key_value(key, value)
+      if value.is_a?(Array)
+        # OR together multiple values for the same filter
+        '(' + value.map{|i| '%s:"%s"' % [key,i]}.join(' OR ') + ')'
+      else
+        '%s:"%s"' % [key,value]
+      end  
     end
     
     # The facets option gets turned into a comma separated string
@@ -137,6 +160,7 @@ module DNZ
     def parsed_search_options
       parsed_options = @search_options.dup
       parsed_options.delete(:filter)
+      parsed_options.delete(:collection)
     
       parsed_options[:search_text] = parsed_search_text
       parsed_options[:facets] = parsed_search_facets
