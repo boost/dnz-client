@@ -141,6 +141,11 @@ describe Client do
       @client.should_receive(:search).with('*:*', :facets => 'category', :facet_num_results => 100).and_return(@search)
       @client.categories
     end
+
+    it 'should run a search with custom_search' do
+      @client.should_receive(:search).with('*:*', :facets => 'category', :facet_num_results => 100, :custom_search => 'test').and_return(@search)
+      @client.categories(:custom_search => 'test')
+    end
     
     it 'should return the categories facet' do
       @client.categories.should == @categories

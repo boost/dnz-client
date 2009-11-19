@@ -100,13 +100,18 @@ module DNZ
 
     # Get a list of all categories using the 'category' facet.
     #
+    # ==== Options
+    #
+    # * <tt>:custom_search</tt> - The name of a custom search created at http://digitalnz.org
+    #
     # ==== Example
     #   categories = client.categories
     #   categories.each do |category|
     #     puts category.name
     #   end
-    def categories
-      search('*:*', :facets => 'category', :facet_num_results => 100).facets['category'].values
+    def categories(options = {})
+      options = options.merge(:facets => 'category', :facet_num_results => 100)
+      search('*:*', options).facets['category'].values
     end
 
     # Run a search using the digitalnz.org API.

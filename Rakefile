@@ -5,8 +5,6 @@ require 'fileutils'
 require './lib/dnz'
 
 Hoe.plugin :newgem
-# Hoe.plugin :website
-# Hoe.plugin :cucumberfeatures
 
 # Generate all the Rake tasks
 # Run 'rake -T' to see list of generated tasks (from gem root directory)
