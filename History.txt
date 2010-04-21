@@ -1,3 +1,7 @@
+=== 0.0.9 2010-04-23
+
+* Support for previewing custom searches
+
 === 0.0.8 2009-11-19
 
 * Support for custom_search API with categories call.

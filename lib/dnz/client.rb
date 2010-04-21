@@ -2,6 +2,7 @@ require 'rubygems'
 require 'open-uri'
 require 'set'
 require 'active_support'
+require 'dnz/custom_search'
 require 'dnz/search'
 require 'dnz/error/invalid_api_key'
 
@@ -24,7 +25,8 @@ module DNZ
     # API URLS
     APIS = {
       :search => 'records/${version}.xml/',
-      :custom_search => 'custom_searches/${version}/${custom_search}.xml'
+      :custom_search => 'custom_searches/${version}/${custom_search}.xml',
+      :custom_search_preview => 'custom_searches/${version}/test.xml'
     }
 
     # API Arguments
@@ -74,6 +76,9 @@ module DNZ
           :facets,
           :facet_num_results,
           :facet_start
+        ]),
+        :custom_search_preview => Set.new([
+          :api_key
         ])
       }      
     }
@@ -149,14 +154,18 @@ module DNZ
       options[:start] = (page-1) * options[:num_results] if page
 
       DNZ::Search.new(self, options)
-    end  
+    end
 
     # Make a direct call to the digitalnz.org API.
     #
     # * <tt>api</tt> - The api call to make. This must be listed in the APIS constant.
     # * <tt>options</tt> - A hash of options to pass to the API call. These options must be defined in the ARGS constant.
     def fetch(api, options = {})
-      validate_options(api, options)
+      options = options.dup
+      
+      unless options.delete(:validate) === false
+        validate_options(api, options)
+      end
 
       options = options.reverse_merge(
         :api_key => self.api_key,
