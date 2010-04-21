@@ -38,13 +38,17 @@ module DNZ
     end
     
     def preview
-      options = {:validate => false}
+      options = {:validate => false, :search_text => '*:*'}
       attributes.each do |key, value|
         options['custom_search[%s]' % key] = value
       end
       
       xml = @client.fetch(:custom_search_preview, options)
-      DNZ::Results.new(xml)
+      DNZ::Results.new(xml, self)
+    end
+    
+    def text
+      attributes[:search_term] || ''
     end
   end
 end

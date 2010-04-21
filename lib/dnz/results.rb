@@ -31,10 +31,11 @@ module DNZ
     # An array of results. If the mislav-will_paginate gem is installed this will return a paginated array.
     attr_reader :results
     
-    def initialize(xml)
+    def initialize(xml, search)
       reset
 
       @xml = xml
+      @search = search
 
       # Parse the results
       parse_attributes
@@ -104,7 +105,7 @@ module DNZ
       @facets = FacetArray.new
 
       doc.xpath('//facets/facet').each do |facet_xml|
-        @facets << DNZ::Facet.new(@client, self, facet_xml)
+        @facets << DNZ::Facet.new(@client, @search, facet_xml)
       end
     end
   end

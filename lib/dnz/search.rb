@@ -133,7 +133,7 @@ module DNZ
     # Execute the search by making the API call
     def execute      
       @xml = @client.send(:fetch, execute_action, parsed_search_options)
-      @results = DNZ::Results.new(@xml)
+      @results = DNZ::Results.new(@xml, self)
 
       self
     end
