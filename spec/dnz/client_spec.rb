@@ -130,7 +130,26 @@ describe Client do
         end
       end
     end
+    
+    describe '#new' do
+      before do
+        @api_key = 'abc'
+        @url = 'http://example.com/'
+      end
+      
+      it 'should return a Client instance' do
+        Client.new(@api_key).should be_a(Client)
+      end
 
+      
+      it 'should remove the last forward slash from the URL' do
+        @client = Client.new(@api_key, 'v1', @url)
+        @client.should_receive(:open).with do |url|
+          url.should include('http://example.com/records/v1.xml/?')
+        end
+        @client.fetch(:search, :search_text => '*:*')
+      end
+    end
 
     describe '#search' do
       it 'should create a new search object and return it' do

@@ -113,6 +113,10 @@ module DNZ
       @api_key = api_key
       @base_url = base_url
       @version = version
+      
+      if @base_url =~ /^(.*)\/$/
+        @base_url = $1
+      end
     end
 
     # Get a list of all categories using the 'category' facet.
