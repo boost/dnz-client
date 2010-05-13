@@ -54,6 +54,10 @@ module DNZ
     def pages
       num_results_requested < result_count ? (result_count.to_f / num_results_requested).ceil : 1
     end
+    
+    def per_page
+      num_results_requested < 1 ? 1 : num_results_requested
+    end
 
     # The number of results requested via the :num_results option (see <tt>Client.search</tt>).
     def num_results_requested
@@ -76,7 +80,7 @@ module DNZ
 
     # Replace the results array with a paginated array
     def paginate_results
-      @results = WillPaginate::Collection.create(self.page, num_results_requested, self.result_count) do |pager|
+      @results = WillPaginate::Collection.create(self.page, per_page, self.result_count) do |pager|
         pager.replace @results
       end
     end

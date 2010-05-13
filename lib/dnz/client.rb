@@ -15,6 +15,18 @@ module DNZ
   # Copyright:: Copyright (c) 2009 Boost New Media
   # License:: MIT
   class Client
+    cattr_accessor :connection
+    
+    class << self
+      def connect(*args)
+        self.connection = self.new(*args)
+      end
+      
+      def method_missing(method, *args, &block)
+        self.connection.send(method, *args, &block)
+      end
+    end
+    
     # The dnz API key
     attr_reader :api_key
     # The base URL (defaults to http://api.digitalnz.org)

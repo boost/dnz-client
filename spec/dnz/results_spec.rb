@@ -24,11 +24,12 @@ describe Results do
     @doc = Nokogiri::XML(@xml)
     @result = mock(:result)
     @facet = mock(:facet)
+    @search = mock(:search)
 
     Result.stub!(:new).and_return(@result)
     Facet.stub!(:new).and_return(@facet)
     
-    @instance = Results.new(@xml)
+    @instance = Results.new(@xml, @search)
   end
   
   describe '#result_count' do
