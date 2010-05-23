@@ -5,21 +5,54 @@ include DNZ
 
 describe Record do
   before(:each) do
-    @xml = %Q{<DNZ::Record:0x1018c80c8 @doc=#<Nokogiri::XML::Document:0x80b73b3c name="document" children=[#<Nokogiri::XML::Element:0x80b73aec name="mets" namespace=#<Nokogiri::XML::Namespace:0x80b73ab0 href="http://www.loc.gov/METS/"> attributes=[#<Nokogiri::XML::Attr:0x80b71648 name="OBJID" value="http://paperspast.natlib.govt.nz/cgi-bin/paperspast?a=d&d=GRA18891105.2.14.3">, #<Nokogiri::XML::Attr:0x80b71634 name="PROFILE" value="GDL-NLNZ">, #<Nokogiri::XML::Attr:0x80b71620 name="schemaLocation" namespace=#<Nokogiri::XML::Namespace:0x80b73a88 prefix="xsi" href="http://www.w3.org/2001/XMLSchema-instance"> value="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd">] children=[#<Nokogiri::XML::Text:0x80b705a4 "\n ">, #<Nokogiri::XML::Element:0x80b70554 name="dnzHeader" namespace=#<Nokogiri::XML::Namespace:0x80b73ab0 href="http://www.loc.gov/METS/"> attributes=[#<Nokogiri::XML::Attr:0x80b70400 name="lastModifiedAt" value="2010-04-14T14:50:55Z">]>, #<Nokogiri::XML::Text:0x80b7048c "\n ">, #<Nokogiri::XML::Element:0x80b6f85c name="dmdSec" namespace=#<Nokogiri::XML::Namespace:0x80b73ab0 href="http://www.loc.gov/METS/"> attributes=[#<Nokogiri::XML::Attr:0x80b6f460 name="ID" value="dc">] children=[#<Nokogiri::XML::Text:0x80b6e77c "\n  ">, #<Nokogiri::XML::Element:0x80b6e4fc name="mdWrap" namespace=#<Nokogiri::XML::Namespace:0x80b73ab0 href="http://www.loc.gov/METS/"> attributes=[#<Nokogiri::XML::Attr:0x80b6e150 name="MIMETYPE" value="text/xml">, #<Nokogiri::XML::Attr:0x80b6e13c name="MDTYPE" value="DC">] children=[#<Nokogiri::XML::Text:0x80b6d980 "\n   ">, #<Nokogiri::XML::Element:0x80b7322c name="xmlData" namespace=#<Nokogiri::XML::Namespace:0x80b73ab0 href="http://www.loc.gov/METS/"> children=[#<Nokogiri::XML::Text:0x80b72570 "\n    ">, #<Nokogiri::XML::Element:0x80b72534 name="date" namespace=#<Nokogiri::XML::Namespace:0x80b6c42c prefix="dc" href="http://www.example.com/example"> children=[#<Nokogiri::XML::Text:0x80b6be50 "1889-11-05T00:00:00.000Z">]>, #<Nokogiri::XML::Text:0x80b724e4 "\n    ">, #<Nokogiri::XML::Element:0x80b724a8 name="identifier" namespace=#<Nokogiri::XML::Namespace:0x80b6c42c prefix="dc" href="http://www.example.com/example"> children=[#<Nokogiri::XML::Text:0x80b6ade8 "http://paperspast.natlib.govt.nz/cgi-bin/paperspast?a=d&d=GRA18891105.2.14.3">]>, #<Nokogiri::XML::Text:0x80b7246c "\n    ">, #<Nokogiri::XML::Element:0x80b72430 name="language" namespace=#<Nokogiri::XML::Namespace:0x80b6c42c prefix="dc" href="http://www.example.com/example"> children=[#<Nokogiri::XML::Text:0x80b6a1a4 "en">]>, #<Nokogiri::XML::Text:0x80b723e0 "\n    ">, #<Nokogiri::XML::Element:0x80b72354 name="publisher" namespace=#<Nokogiri::XML::Namespace:0x80b6c42c prefix="dc" href="http://www.example.com/example"> children=[#<Nokogiri::XML::Text:0x80b691dc "James Kerr (1834-1901)">]>, #<Nokogiri::XML::Text:0x80b72318 "\n    ">, #<Nokogiri::XML::Element:0x80b722dc name="title" namespace=#<Nokogiri::XML::Namespace:0x80b6c42c prefix="dc" href="http://www.example.com/example"> children=[#<Nokogiri::XML::Text:0x80b685ac "Page 3 Advertisements Column 3 (Grey River Argus, 5 November 1889)">]>, #<Nokogiri::XML::Text:0x80b7223c "\n    ">, #<Nokogiri::XML::Element:0x80b72200 name="type" namespace=#<Nokogiri::XML::Namespace:0x80b6c42c prefix="dc" href="http://www.example.com/example"> children=[#<Nokogiri::XML::Text:0x80b67698 "Advertisement">]>, #<Nokogiri::XML::Text:0x80b7214c "\n    ">, #<Nokogiri::XML::Element:0x80b72110 name="type" namespace=#<Nokogiri::XML::Namespace:0x80b6c42c prefix="dc" href="http://www.example.com/example"> children=[#<Nokogiri::XML::Text:0x80b66414 "text/html">]>, #<Nokogiri::XML::Text:0x80b720d4 "\n   ">]>, #<Nokogiri::XML::Text:0x80b65e38 "\n  ">]>, #<Nokogiri::XML::Text:0x80b65ca8 "\n ">]>, #<Nokogiri::XML::Text:0x80b65b40 "\n ">, #<Nokogiri::XML::Element:0x80b65af0 name="dmdSec" namespace=#<Nokogiri::XML::Namespace:0x80b73ab0 href="http://www.loc.gov/METS/"> attributes=[#<Nokogiri::XML::Attr:0x80b6599c name="ID" value="dnz">] children=[#<Nokogiri::XML::Text:0x80b652a8 "\n  ">, #<Nokogiri::XML::Element:0x80b65230 name="mdWrap" namespace=#<Nokogiri::XML::Namespace:0x80b73ab0 href="http://www.loc.gov/METS/"> attributes=[#<Nokogiri::XML::Attr:0x80b64f38 name="MIMETYPE" value="text/xml">, #<Nokogiri::XML::Attr:0x80b64f24 name="MDTYPE" value="OTHER">] children=[#<Nokogiri::XML::Text:0x80b63e44 "\n   ">, #<Nokogiri::XML::Element:0x80b72084 name="xmlData" namespace=#<Nokogiri::XML::Namespace:0x80b73ab0 href="http://www.loc.gov/METS/"> children=[#<Nokogiri::XML::Text:0x80b71fe4 "\n    ">, #<Nokogiri::XML::Element:0x80b71fa8 name="category" namespace=#<Nokogiri::XML::Namespace:0x80b6350c prefix="dnz" href="http://www.example.com/example"> children=[#<Nokogiri::XML::Text:0x80b62f44 "Newspapers">]>, #<Nokogiri::XML::Text:0x80b71f58 "\n    ">, #<Nokogiri::XML::Element:0x80b71eb8 name="collection" namespace=#<Nokogiri::XML::Namespace:0x80b6350c prefix="dnz" href="http://www.example.com/example"> children=[#<Nokogiri::XML::Text:0x80b62378 "Papers Past">]>, #<Nokogiri::XML::Text:0x80b71e7c "\n    ">, #<Nokogiri::XML::Element:0x80b71e40 name="content_partner" namespace=#<Nokogiri::XML::Namespace:0x80b6350c prefix="dnz" href="http://www.example.com/example"> children=[#<Nokogiri::XML::Text:0x80b616f8 "Alexander Turnbull Library">]>, #<Nokogiri::XML::Text:0x80b71db4 "\n    ">, #<Nokogiri::XML::Element:0x80b71d50 name="landing_url" namespace=#<Nokogiri::XML::Namespace:0x80b6350c prefix="dnz" href="http://www.example.com/example"> children=[#<Nokogiri::XML::Text:0x80b60f50 "http://paperspast.natlib.govt.nz/cgi-bin/paperspast?a=d&d=GRA18891105.2.14.3">]>, #<Nokogiri::XML::Text:0x80b71d14 "\n    ">, #<Nokogiri::XML::Element:0x80b71af8 name="rights" namespace=#<Nokogiri::XML::Namespace:0x80b6350c prefix="dnz" href="http://www.example.com/example"> children=[#<Nokogiri::XML::Text:0x80b606f4 "Some rights reserved">]>, #<Nokogiri::XML::Text:0x80b71abc "\n    ">, #<Nokogiri::XML::Element:0x80b71a80 name="rights_url" namespace=#<Nokogiri::XML::Namespace:0x80b6350c prefix="dnz" href="http://www.example.com/example"> children=[#<Nokogiri::XML::Text:0x80b5ebc4 "http://paperspast.natlib.govt.nz/cgi-bin/paperspast?a=p&p=terms">]>, #<Nokogiri::XML::Text:0x80b71a44 "\n   ">]>, #<Nokogiri::XML::Text:0x80b5e854 "\n  ">]>, #<Nokogiri::XML::Text:0x80b5e6ec "\n ">]>, #<Nokogiri::XML::Text:0x80b5e584 "\n">]>]>, @xml=#<StringIO:0x1016ffe58>, @client=#<DNZ::Client:0x1018dc5a0 @api_key="eaa93ce9b8428953266f9adc4633295b", @version="v2", @base_url="http://uat.search.digitalnz.org">, @data=dc => [ date, identifier, language, publisher, title, type ], dnz => [ category, collection, content_partner, landing_url, rights, rights_url ]>}
+    @xml = %Q{<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<mets OBJID="oai:horowhenua.kete.net.nz:site:StillImage:12647" PROFILE="GDL-NLNZ" xmlns="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd">
+ <dmdSec ID="dc">
+  <mdWrap MIMETYPE="text/xml" MDTYPE="DC">
+   <xmlData xmlns:dc="http://www.example.com/example">
+    <dc:creator>Pippa</dc:creator>
+    <dc:creator>pmc1</dc:creator>
+    <dc:date>2008-03-06T00:00:00.000Z</dc:date>
+    <dc:description>Pippa&amp;amp;#39;s test&amp;amp;nbsp;</dc:description>
+    <dc:format>image/gif</dc:format>
+    <dc:identifier>GIF-109</dc:identifier>
+    <dc:publisher>horowhenua.kete.net.nz</dc:publisher>
+    <dc:relation>http://horowhenua.kete.net.nz/site/topics/show/1816</dc:relation>
+    <dc:rights>http://creativecommons.org/licenses/by-nc-sa/3.0/nz/</dc:rights>
+    <dc:subject>Test layout 1</dc:subject>
+    <dc:subject>Test layout 2</dc:subject>
+    <dc:title>test angel</dc:title>
+    <dc:type>InteractiveResource</7dc:type>
+    <dc:type>AnotherType</dc:type>
+    <dc:source>Example source</dc:source>
+   </xmlData>
+  </mdWrap>
+ </dmdSec>
+ <dmdSec ID="dnz">
+  <mdWrap MIMETYPE="text/xml" MDTYPE="OTHER">
+   <xmlData xmlns:dnz="http://www.example.com/example">
+    <dnz:category>Images</dnz:category>
+    <dnz:collection>Kete Horowhenua</dnz:collection>
+    <dnz:content_partner>Kete Horowhenua Partner</dnz:content_partner>
+    <dnz:landing_url>http://horowhenua.kete.net.nz/site/images/show/12647-test-angel</dnz:landing_url>
+    <dnz:object_url>http://horowhenua.kete.net.nz/image_files/0000/0006/6611/bleangel.gif</dnz:object_url>
+    <dnz:thumbnail_url>http://horowhenua.kete.net.nz/image_files/0000/0006/6611/bleangel_medium.gif</dnz:thumbnail_url>
+    <dnz:tag type="user" namespace="moe::status::">restricted</dnz:tag>
+   </xmlData>
+  </mdWrap>
+ </dmdSec>}
 
-    @doc = Nokogiri::XML(@xml)
     @client = mock(:client)
     @record = mock(:record)
     @options = {:id => '123'}
 
     Record.stub!(:find).and_return(@record)
-
     @client.stub!(:fetch).and_return(@xml)
   end
 
   describe 'Record.new' do
     it 'should call @client.fetch' do
-      @client.should_receive(:fetch).with(:record, @options)
+      @client.should_receive(:fetch).with(:record, :id => 123)
       Record.new(@client, 123)
     end
   end
@@ -30,5 +63,4 @@ describe Record do
       Record.find(@options).should == @doc
     end
   end
-
 end
