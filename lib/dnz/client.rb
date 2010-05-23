@@ -4,6 +4,7 @@ require 'set'
 require 'active_support'
 require 'dnz/custom_search'
 require 'dnz/search'
+require 'dnz/record'
 require 'dnz/error/invalid_api_key'
 
 module DNZ
@@ -38,7 +39,8 @@ module DNZ
     APIS = {
       :search => 'records/${version}.xml/',
       :custom_search => 'custom_searches/${version}/${custom_search}.xml',
-      :custom_search_preview => 'custom_searches/${version}/test.xml'
+      :custom_search_preview => 'custom_searches/${version}/test.xml',
+      :record => 'records/${version}/${id}.xml'
     }
 
     # API Arguments
@@ -217,7 +219,7 @@ module DNZ
         variable_name = $1.to_sym
                 
         if options.has_key?(variable_name)
-          path.sub!(variable_regex, options.delete(variable_name))
+          path.sub!(variable_regex, options.delete(variable_name).to_s)
         else
           raise ArgumentError.new("Required argument missing: #{variable_name}")
         end

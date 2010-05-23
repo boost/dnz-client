@@ -12,6 +12,8 @@ lib/dnz/facet_array.rb
 lib/dnz/result.rb
 lib/dnz/results.rb
 lib/dnz/custom_search.rb
+lib/dnz/namespace_array.rb
+lib/dnz/record.rb
 lib/dnz/search.rb
 lib/dnz/memoizable.rb
 lib/dnz/error/invalid_api_key.rb
