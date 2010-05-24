@@ -41,28 +41,30 @@ module DNZ
 
     def initialize(client, search, doc)
       @name = doc.xpath('facet-field').text
-      @values = {}
+      @values = []
       @search = search
 
       doc.xpath('values').first.children.each do |value_doc|
         value = DNZ::FacetValue.new(client, self, value_doc)
-        @values[value.name] = value if value.valid?
+        @values << value if value.valid?
       end
     end
     
     # An array of FacetValue objects
     def values
-      @values.values
+      @values
     end
 
     # Retrieve a FacetValue by name
     def [](index)
-      @values[index]
+      @values.detect{|value| value.name == index }
     end
     
     # Enumerate the FacetValue objects
     def each
-      @values.each {|key, value| yield value }
+      @values.each do |value|
+        yield value
+      end
     end
     
     def to_s

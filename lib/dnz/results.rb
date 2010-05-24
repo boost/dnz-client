@@ -107,7 +107,6 @@ module DNZ
     # Parse the facets into an array of DNZ::FacetArray
     def parse_facets      
       @facets = FacetArray.new
-
       doc.xpath('//facets/facet').each do |facet_xml|
         @facets << DNZ::Facet.new(@client, @search, facet_xml)
       end

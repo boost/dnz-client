@@ -3,11 +3,11 @@ require 'dnz/memoizable'
 require 'dnz/namespace_array'
 
 module DNZ
+  # This class is for fetching record metadata from DigitalNZ.
   class Record
     def self.find(id)
       self.new(Client.connection, id)
     end
-
 
     def initialize(client, id)
       @client = client
@@ -17,23 +17,20 @@ module DNZ
       parse_record
     end
 
-
-    def method_missing(method, *args, &block)
+    def method_missing(method, * args, & block)
       if attribute = document.root.attributes[method.to_s.upcase]
         attribute.to_s
       else
-        @data.send(method, *args, &block)
+        @data.send(method, * args, & block)
       end
     end
 
+    private
 
-private
     # Return a Nokogiri document for the XML
     def document
       @doc ||= Nokogiri::XML(@xml)
     end
-
-
 
     # Parse the result into an array of DNZ::Result
     def parse_record

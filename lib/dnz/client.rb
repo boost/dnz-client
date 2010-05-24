@@ -133,7 +133,7 @@ module DNZ
     #     puts category.name
     #   end
     def categories(options = {})
-      options = options.merge(:facets => 'category', :facet_num_results => 100)
+      options = options.merge(:facets => 'category', :facet_num_results => 100, :num_results => 0)
       search('*:*', options).facets['category'].values
     end
 
