@@ -17,6 +17,10 @@ module DNZ
       parse_record
     end
 
+    def type
+      @data['type']
+    end
+
     def method_missing(method, * args, & block)
       if attribute = document.root.attributes[method.to_s.upcase]
         attribute.to_s

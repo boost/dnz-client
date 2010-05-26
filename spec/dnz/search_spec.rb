@@ -58,7 +58,7 @@ describe Search do
       @options = {:search_text => 'test', :filter => {:category => 'Images'}}
       @client.should_receive(:fetch).with(
         :search,
-        :search_text => 'test AND category:"Images"',
+        :search_text => '(test) AND (category:"Images")',
         :facets => ""
       ).and_return(@xml)
       Search.new(@client, @options)
@@ -68,7 +68,7 @@ describe Search do
       @options = {:search_text => 'test', :filter => {:category => ['Images', 'Videos']}}
       @client.should_receive(:fetch).with(
         :search,
-        :search_text => 'test AND (category:"Images" OR category:"Videos")',
+        :search_text => '(test) AND ((category:"Images" OR category:"Videos"))',
         :facets => ""
       ).and_return(@xml)
       Search.new(@client, @options)
