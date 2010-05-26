@@ -52,11 +52,6 @@ describe Record do
 
   describe 'Record.new' do
     it 'should call @client.fetch' do
-      @client.should_receive(:fetch).with(:record, :id => 123)
-      Record.new(@client, 123)
-    end
-    
-    it 'should call @client.fetch' do
       @client.should_receive(:fetch).with(:record,  :id => 123).and_return(@xml)
       Record.new(@client, 123)
     end
