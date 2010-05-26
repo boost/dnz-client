@@ -1,3 +1,20 @@
+=== 0.1.3 2010-05-26
+
+* Fix for filtering bug where filters would combine incorrectly with search terms. For example:
+
+  :search_text => 'id:123 OR id:321', :filter => {:content_partner => 'National Library'}
+
+before this fix this would result in the following search being run:
+
+  id:123 OR id:321 AND content_partner:"National Library"
+
+clearly this does not follow the intent of the filter option, as it would only return id:321 if it is from
+the National Library partner, but would return id:123 regardless.
+
+After the change:
+
+  (id:123 OR id:321) AND content_partner:"National Library"
+
 === 0.1.2 2010-05-24
 
 * Fix for bug where facet values would not be returned in order.
