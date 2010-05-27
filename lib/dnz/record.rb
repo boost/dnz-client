@@ -9,10 +9,13 @@ module DNZ
       self.new(Client.connection, id)
     end
 
+    attr_reader :id
+
     def initialize(client, id)
       @client = client
-      options = {:id => id}
+      @id = id
 
+      options = {:id => @id}
       @xml = @client.fetch(:record, options)
       parse_record
     end

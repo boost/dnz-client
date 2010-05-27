@@ -82,6 +82,12 @@ describe Record do
       Record.find(123).should == @doc
     end
   end
+
+  describe '#id' do
+    before { @record = Record.new(@client, 123) }
+    subject { @record.id }
+    it { should == 123 }
+  end
 end
 
 
