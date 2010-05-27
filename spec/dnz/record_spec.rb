@@ -20,8 +20,8 @@ describe Record do
                     <dc:published>horowhenua.kete.net.nz</dc:published>
                     <dc:relation>http://horowhenua.kete.net.nz/site/topics/show/1816</dc:relation>
                     <dc:rights>http://creativecommons.org/licenses/by-nc-sa/3.0/nz/</dc:rights>
-                    <dc:subject>Test layout 1</dc:subject>
-                    <dc:subject>Test layout 2</dc:subject>
+                    <dc:subject>Test subject 1</dc:subject>
+                    <dc:subject>Test subject 2</dc:subject>
                     <dc:title>test angel</dc:title>
                     <dc:type>InteractiveResource</7dc:type>
                     <dc:type>AnotherType</dc:type>
@@ -62,7 +62,20 @@ describe Record do
     end
   end
 
-  
+  describe 'Record attributes' do
+    it 'should return attributes for the record via method_missing' do
+      record = Record.new(@client, 123)
+      record.title.text.should == 'test angel'
+      record.subject.first.text.should == 'Test subject 1'
+      record.subject.last.text.should == 'Test subject 2'      
+    end
+
+    it 'should return the record type' do
+      record = Record.new(@client, 123)
+      record.type.first.text.should == "InteractiveResource"
+    end
+  end
+
   describe 'Record.find' do 
     it 'should create one result' do
       Record.should_receive(:find).and_return(@doc)
