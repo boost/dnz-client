@@ -67,7 +67,12 @@ describe Record do
       record = Record.new(@client, 123)
       record.title.text.should == 'test angel'
       record.subject.first.text.should == 'Test subject 1'
-      record.subject.last.text.should == 'Test subject 2'      
+      record.subject.last.text.should == 'Test subject 2'
+    end
+
+    it 'should return nil if the attribute is not found' do
+      record = Record.new(@client, 123)
+      record.noattribute.text == nil
     end
 
     it 'should return the record type' do
@@ -76,17 +81,11 @@ describe Record do
     end
   end
 
-  describe 'Record.find' do 
+  describe 'Record.find' do
     it 'should create one result' do
       Record.should_receive(:find).and_return(@doc)
       Record.find(123).should == @doc
     end
-  end
-
-  describe '#id' do
-    before { @record = Record.new(@client, 123) }
-    subject { @record.id }
-    it { should == 123 }
   end
 end
 
