@@ -1,3 +1,5 @@
+require 'active_support/core_ext'
+
 module DNZ
   module Memoizable
     def self.memoized_ivar_for(symbol)
